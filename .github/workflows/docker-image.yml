@@ -13,15 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: docker login
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Docker Login
       env:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
       run: |
         docker login -u $DOCKER_USERNAME -p $DOCKER_TOKEN 
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag chshahid/cicd-test:$(date +%s)
       
     - name: Docker Push
       run: docker push chshahid/cicd-test
+      if: success()  # Run this step only if the build is successful
