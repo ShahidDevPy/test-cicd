@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Docker Image CI
 
 on:
   push:
@@ -25,3 +25,7 @@ jobs:
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag chshahid/cicd-test:latest
+        
+      - name: Docker Push
+        run: docker push chshahid/cicd-test:latest
+        if: success()  # Run this step only if the build is successful
